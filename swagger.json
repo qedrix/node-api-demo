@@ -1,0 +1,506 @@
+{
+    "openapi" : "3.0.1",
+    "info" : {
+      "title" : "node-api-demo",
+      "description" : "This app demonstrates my dev skills in node, express, typescript, class-validation and prisma.",
+      "version" : "1.0.0"
+    },
+    "servers" : [ {
+      "url" : "http://localhost:5000"
+    } ],
+    "paths" : {
+      "/users" : {
+        "post" : {
+          "description" : "Create a new user in the system",
+          "requestBody" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "firstName" : {
+                      "type" : "string"
+                    },
+                    "lastName" : {
+                      "type" : "string"
+                    },
+                    "password" : {
+                      "type" : "string"
+                    },
+                    "dob" : {
+                      "type" : "string"
+                    },
+                    "email" : {
+                      "type" : "string"
+                    }
+                  }
+                },
+                "examples" : {
+                  "0" : {
+                    "value" : "{\n    \"firstName\":\"John\",\n    \"lastName\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"Ttbhelp@$123\",\n    \"dob\": \"2015-06-22\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "responses" : {
+            "200" : {
+              "description" : "Returns the newly created user object without the password field set",
+              "content" : {
+                "application/json; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            }
+          },
+          "servers" : [ {
+            "url" : "http://localhost:5000"
+          } ]
+        },
+        "servers" : [ {
+          "url" : "http://localhost:5000"
+        } ]
+      },
+      "/users/password" : {
+        "put" : {
+          "description" : "This api resets user password",
+          "requestBody" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "action" : {
+                      "type" : "string"
+                    },
+                    "reset" : {
+                      "type" : "object",
+                      "properties" : {
+                        "password" : {
+                          "type" : "string"
+                        },
+                        "passwordConfirm" : {
+                          "type" : "string"
+                        },
+                        "resetKey" : {
+                          "type" : "string"
+                        }
+                      }
+                    },
+                    "email" : {
+                      "type" : "string"
+                    }
+                  }
+                },
+                "examples" : {
+                  "0" : {
+                    "value" : "{\n    \"email\": \"john.doe@example.com\",\n    \"action\": \"RESET_PASSWORD_INIT\"\n}"
+                  },
+                  "1" : {
+                    "value" : "{\n    \"email\": \"john.doe@example.com\",\n    \"action\": \"RESET_PASSWORD\",\n    \"reset\": {\n        \"resetKey\": \"1vdEziNjWcHLWmBEbRfqa44SJyRmU78\",\n        \"password\": \"Ttbhelp@$1234\",\n        \"passwordConfirm\": \"Ttbhelp@$1234\"\n    }\n}"
+                  }
+                }
+              }
+            }
+          },
+          "responses" : {
+            "200" : {
+              "description" : "A 200 OK resposne is sent if the reset was successful",
+              "content" : {
+                "application/json; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            },
+            "400" : {
+              "description" : "An error is raised if reset could not be initiated or completed",
+              "content" : {
+                "application/json; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            }
+          },
+          "servers" : [ {
+            "url" : "http://localhost:5000"
+          } ]
+        },
+        "servers" : [ {
+          "url" : "http://localhost:5000"
+        } ]
+      },
+      "/heartbeat" : {
+        "get" : {
+          "description" : "This api is used to check if the server is alive",
+          "responses" : {
+            "200" : {
+              "description" : "Returns a standard 200 OK message",
+              "content" : {
+                "text/plain; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            }
+          },
+          "servers" : [ {
+            "url" : "http://localhost:5000"
+          } ]
+        },
+        "servers" : [ {
+          "url" : "http://localhost:5000"
+        } ]
+      },
+      "/tokens" : {
+        "post" : {
+          "description" : "This api is used to login a user. It uses JWT tokens to authenticate a session.",
+          "requestBody" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "password" : {
+                      "type" : "string"
+                    },
+                    "email" : {
+                      "type" : "string"
+                    }
+                  }
+                },
+                "examples" : {
+                  "0" : {
+                    "value" : "{\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"Ttbhelp@$1234\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "responses" : {
+            "200" : {
+              "description" : "A successful response will add the Token to the session Cookie.",
+              "content" : {
+                "application/json; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            },
+            "400" : {
+              "description" : "This response is sent when the login fails",
+              "content" : {
+                "application/json; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            }
+          },
+          "servers" : [ {
+            "url" : "http://localhost:5000"
+          } ]
+        },
+        "servers" : [ {
+          "url" : "http://localhost:5000"
+        } ]
+      },
+      "/users/4" : {
+        "get" : {
+          "description" : "Get the complete details of a registered user",
+          "responses" : {
+            "200" : {
+              "description" : "Returns a user object if exists in the server",
+              "content" : {
+                "application/json; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            }
+          },
+          "servers" : [ {
+            "url" : "http://localhost:5000"
+          } ]
+        },
+        "post" : {
+          "description" : "Modifies a user collection",
+          "requestBody" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "preferences" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "name" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "activate" : {
+                      "type" : "object",
+                      "properties" : {
+                        "activationCode" : {
+                          "type" : "integer"
+                        }
+                      }
+                    },
+                    "action" : {
+                      "type" : "string"
+                    },
+                    "email" : {
+                      "type" : "string"
+                    }
+                  }
+                },
+                "examples" : {
+                  "0" : {
+                    "value" : "{\n    \"email\": \"john.doe@example.com\",\n    \"action\": \"ACTIVATE_ACCOUNT\",\n    \"activate\": {\n        \"activationCode\": 111066\n    }\n}"
+                  },
+                  "1" : {
+                    "value" : "{\n    \"action\": \"UPDATE_PREFERENCE\",\n    \"email\": \"qedrix@gmail.com\",\n    \"preferences\": [\n        {\"name\": \"Furniture\"},\n        {\"name\": \"Music\"}\n    ]\n}"
+                  }
+                }
+              }
+            }
+          },
+          "responses" : {
+            "404" : {
+              "description" : "Sends an error if the user doens't exist",
+              "content" : {
+                "text/html; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            }
+          },
+          "servers" : [ {
+            "url" : "http://localhost:5000"
+          } ]
+        },
+        "patch" : {
+          "description" : "Use this api to activate the user or add shopping preferneces for the user. An action is defined in the payload to control behaviour.",
+          "requestBody" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "preferences" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "name" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "activate" : {
+                      "type" : "object",
+                      "properties" : {
+                        "activationCode" : {
+                          "type" : "integer"
+                        }
+                      }
+                    },
+                    "action" : {
+                      "type" : "string"
+                    },
+                    "email" : {
+                      "type" : "string"
+                    }
+                  }
+                },
+                "examples" : {
+                  "0" : {
+                    "value" : "{\n    \"email\": \"john.doe@example.com\",\n    \"action\": \"ACTIVATE_ACCOUNT\",\n    \"activate\": {\n        \"activationCode\": 111066\n    }\n}"
+                  },
+                  "1" : {
+                    "value" : "{\n    \"action\": \"UPDATE_PREFERENCE\",\n    \"email\": \"qedrix@gmail.com\",\n    \"preferences\": [\n        {\"name\": \"Furniture\"},\n        {\"name\": \"Music\"}\n    ]\n}"
+                  }
+                }
+              }
+            }
+          },
+          "responses" : {
+            "200" : {
+              "description" : "A successful respose",
+              "content" : {
+                "application/json; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            },
+            "400" : {
+              "description" : "Some error while validating the payload",
+              "content" : {
+                "application/json; charset=utf-8" : {
+                  "schema" : {
+                    "type" : "string"
+                  },
+                  "examples" : { }
+                }
+              }
+            },
+            "default" : {
+              "description" : "Play with this api and test the various services"
+            }
+          },
+          "servers" : [ {
+            "url" : "http://localhost:5000"
+          } ]
+        },
+        "servers" : [ {
+          "url" : "http://localhost:5000"
+        } ]
+      }
+    },
+    "components": {
+      "schemas": {
+        "users_body": {
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "dob": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "userspassword_reset": {
+          "type": "object",
+          "properties": {
+            "password": {
+              "type": "string"
+            },
+            "passwordConfirm": {
+              "type": "string"
+            },
+            "resetKey": {
+              "type": "string"
+            }
+          }
+        },
+        "users_password_body": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string"
+            },
+            "reset": {
+              "$ref": "#/components/schemas/userspassword_reset"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "tokens_body": {
+          "type": "object",
+          "properties": {
+            "password": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "users4_preferences": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "users4_activate": {
+          "type": "object",
+          "properties": {
+            "activationCode": {
+              "type": "integer"
+            }
+          }
+        },
+        "users_4_body": {
+          "type": "object",
+          "properties": {
+            "preferences": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/users4_preferences"
+              }
+            },
+            "activate": {
+              "$ref": "#/components/schemas/users4_activate"
+            },
+            "action": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "users_4_body_1": {
+          "type": "object",
+          "properties": {
+            "preferences": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/users4_preferences"
+              }
+            },
+            "activate": {
+              "$ref": "#/components/schemas/users4_activate"
+            },
+            "action": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }

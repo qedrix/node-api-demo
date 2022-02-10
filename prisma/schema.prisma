@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int                   @id @default(autoincrement())
+  email           String                @unique
+  password        String
+  firstName       String
+  lastName        String
+  dob             DateTime
+  active          Boolean               @default(false)
+  activationCode  Int                   @default(111066)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  preferences     ShoppingPreference[]
+}
+
+model ShoppingPreference {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  users       User[]
+}
+
+model PasswordRequest {
+  id          Int           @id @default(autoincrement())
+  resetKey    String    
+  email       String
+  createdAt   DateTime      @default(now()) 
+}
