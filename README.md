@@ -43,7 +43,7 @@ $ docker build -t qedrix/node-api-demo .
 3. Run the docker image
 
 ```
-$ docker run -p 5000:5000 qedrix/node-api-dem
+$ docker run -p 5000:5000 qedrix/node-api-demo
 ```
 
 Once the app starts, you may use the Postman collection to test the various api functions.
